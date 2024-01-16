@@ -22,7 +22,7 @@ const Header = () => {
                   clipRule="evenodd"
                 />
               </svg>
-            </i>
+            </i> 
             Dee
           </span>
           <span className="text-purple-900">Buildings</span>
