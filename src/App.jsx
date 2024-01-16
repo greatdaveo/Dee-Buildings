@@ -6,6 +6,7 @@ import Register from "./pages/RegisterPage";
 import LogoutPage from "./pages/LogoutPage";
 import AboutPage from "./pages/AboutPage";
 import Header from "./components/homepage/Header";
+import LoginPage from "./pages/LoginPage";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/" element={<SharedLayout />}>
           <Route index element={<HomePage />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/about" element={<AboutPage />} />
         </Route>
