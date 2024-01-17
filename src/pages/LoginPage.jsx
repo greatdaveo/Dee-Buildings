@@ -1,11 +1,90 @@
-import React from 'react'
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  return (
-    <div>
-      <h1>Login page</h1>
-    </div>
-  )
-}
+  const [formData, setFormData] = useState({});
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-export default LoginPage
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+
+      if (data.success === false) {
+        setError(data.message);
+        setLoading(false);
+
+        return;
+      }
+
+      setLoading(false);
+      setError(null);
+      navigate("/");
+    } catch (error) {
+      setLoading(false);
+      setError(error.message);
+    }
+  };
+
+  // console.log(formData);
+
+  return (
+    <div className="p-4 max-w-lg mx-auto">
+      <h1 className="my-7 text-3xl text-white text-center font-semibold">
+        Kindly Login Here!
+      </h1>
+
+      {error && <p className="text-red-500 my-5 text-center">{error}</p>}
+
+      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+        <input
+          type="email"
+          onChange={handleChange}
+          placeholder="Enter your email"
+          className="border p-3 rounded-lg"
+          id="email"
+        />
+        <input
+          type="password"
+          onChange={handleChange}
+          placeholder="Enter your password"
+          className="border p-3 rounded-lg"
+          id="password"
+        />
+        <button
+          disabled={loading}
+          className="bg-purple-500 text-white p-2 rounded-lg font-bold hover:opacity-95 disabled:opacity-80"
+        >
+          {loading ? "Loading..." : "LOGIN"}
+        </button>
+
+        <button className="bg-red-500 text-white p-2 rounded-lg font-bold hover:opacity-95 disabled:opacity-80">
+          CONTINUE WITH GOOGLE
+        </button>
+      </form>
+
+      <div className="flex gap-2 mt-5 ">
+        <p>Not an existing user? </p>
+        <Link to={"/register"} className="text-blue-700">
+          Register here...
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+export default LoginPage;

@@ -48,6 +48,8 @@ const RegisterPage = () => {
         Kindly Register Here!
       </h1>
 
+      {error && <p className="text-red-500 my-5 text-center">{error}</p>}
+
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -88,8 +90,6 @@ const RegisterPage = () => {
           Sign in
         </Link>
       </div>
-
-      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 };
