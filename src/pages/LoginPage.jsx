@@ -6,6 +6,7 @@ import {
   loginSuccess,
   loginFailure,
 } from "../redux/user/userSlice";
+import OAuth from "../components/GoogleAuth/OAuth";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({});
@@ -31,7 +32,7 @@ const LoginPage = () => {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      console.log(data)
+      console.log(data);
       // When the data fetched is false
       if (data.success === false) {
         dispatch(loginFailure(data.message));
@@ -78,9 +79,7 @@ const LoginPage = () => {
           {loading ? "Loading..." : "LOGIN"}
         </button>
 
-        <button className="bg-red-500 text-white p-2 rounded-lg font-bold hover:opacity-95 disabled:opacity-80">
-          CONTINUE WITH GOOGLE
-        </button>
+        <OAuth />
       </form>
 
       <div className="flex gap-2 mt-5 ">
