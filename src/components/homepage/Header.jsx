@@ -1,8 +1,12 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
+
   return (
     <header className="bg-purple-200 shadow-md">
       <nav className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -22,7 +26,7 @@ const Header = () => {
                   clipRule="evenodd"
                 />
               </svg>
-            </i> 
+            </i>
             Dee
           </span>
           <span className="text-purple-900">Buildings</span>
@@ -53,8 +57,16 @@ const Header = () => {
               </li>
             </Link>
 
-            <Link to={"/login"}>
-              <li className="text-purple-600 hover:underline">Login </li>
+            <Link to={"/profile"}>
+              {currentUser ? (
+                <img
+                  src={currentUser.avatar}
+                  className="rounded-full w-7 h-7 object-cover"
+                  alt="profile"
+                />
+              ) : (
+                <li className="text-purple-600 hover:underline">Login </li>
+              )}
             </Link>
           </ul>
         </div>
