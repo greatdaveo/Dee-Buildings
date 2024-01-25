@@ -14,6 +14,9 @@ import {
   deleteProfileFailure,
   deleteProfileStart,
   deleteProfileSuccess,
+  logoutUserStart,
+  logoutUserFailure,
+  logoutUserSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -107,12 +110,35 @@ const ProfilePage = () => {
       }
 
       dispatch(deleteProfileSuccess(data));
-      alert(data.message);
     } catch (error) {
       dispatch(deleteProfileFailure(error.message));
     }
   };
 
+  // To handle logout
+  const handleLogout = async () => {
+    try {
+      dispatch(logoutUserStart());
+      const response = await fetch("/api/auth/logout");
+
+      if (!response.ok) {
+        // Handle error based on status code
+        dispatch(logoutUserFailure("Logout failed"));
+        return;
+      }
+
+      const data = await response.json();
+
+      if (data.success === false) {
+        dispatch(logoutUserFailure(data.message));
+        return;
+      }
+      dispatch(logoutUserSuccess(data));
+      alert("You have logged out successfully!")
+    } catch (error) {
+      dispatch(logoutUserFailure(error.message));
+    }
+  };
   return (
     <div className="p-5 max-w-lg mx-auto">
       <h1 className="text-xl font-bold text-center my-4">Profile</h1>
@@ -157,7 +183,7 @@ const ProfilePage = () => {
           id="username"
           placeholder="username"
           defaultValue={currentUser.username}
-          onClick={handleChange}
+          onChange={handleChange}
           className="border p-3  rounded-lg"
         />
         <input
@@ -165,14 +191,14 @@ const ProfilePage = () => {
           id="email"
           placeholder="email"
           defaultValue={currentUser.email}
-          onClick={handleChange}
+          onChange={handleChange}
           className="border p-3  rounded-lg"
         />
         <input
           type="text"
           id="password"
           placeholder="password"
-          onClick={handleChange}
+          onChange={handleChange}
           className="border p-3  rounded-lg"
         />
         <button className="bg-purple-500 text-white rounded-lg p-3 hover:opacity-80 disabled:opacity-75">
@@ -190,7 +216,9 @@ const ProfilePage = () => {
         >
           Delete account
         </span>
-        <span className="text-red-700 cursor-pointer">Sign out</span>
+        <span className="text-red-700 cursor-pointer" onClick={handleLogout}>
+          Sign out
+        </span>
       </div>
     </div>
   );
