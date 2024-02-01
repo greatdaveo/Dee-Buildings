@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   getDownloadURL,
@@ -134,7 +135,7 @@ const ProfilePage = () => {
         return;
       }
       dispatch(logoutUserSuccess(data));
-      alert("You have logged out successfully!")
+      alert("You have logged out successfully!");
     } catch (error) {
       dispatch(logoutUserFailure(error.message));
     }
@@ -204,9 +205,13 @@ const ProfilePage = () => {
         <button className="bg-purple-500 text-white rounded-lg p-3 hover:opacity-80 disabled:opacity-75">
           UPDATE
         </button>
-        <button className="bg-green-400 text-white rounded-lg p-3 hover:opacity-80 disabled:opacity-75">
+
+        <Link
+          to="/create-listing"
+          className="bg-green-400 text-white text-center rounded-lg p-3 hover:opacity-80 disabled:opacity-75 w-full"
+        >
           CREATE LISTING
-        </button>
+        </Link>
       </form>
 
       <div className="flex justify-between mt-2">
