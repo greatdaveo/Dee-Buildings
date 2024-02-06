@@ -305,7 +305,9 @@ const ProfilePage = () => {
                 >
                   DELETE
                 </button>
-                <button className="text-green-500">EDIT</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-500">EDIT</button>
+                </Link>
               </div>
             </div>
           ))}

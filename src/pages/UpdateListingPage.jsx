@@ -4,12 +4,12 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { app } from "../firebase/firebase";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const UpdateListingPage = () => {
+const CreateListingPage = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
@@ -35,9 +35,26 @@ const UpdateListingPage = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const params = useParams();
 
-  console.log(files);
-  console.log(formData);
+  // console.log(files);
+  // console.log(formData);
+
+  useEffect(() => {
+    const fetchListing = async () => {
+      const listingId = params.listingId;
+      const response = await fetch(`/api/listing/get-listing/${listingId}`);
+      const data = await response.json();
+
+      if ((data.success = false)) {
+        console.log(data.message);
+        return;
+      }
+
+      setFormData(data);
+    };
+    fetchListing();
+  }, []);
 
   const uploadImage = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -135,7 +152,7 @@ const UpdateListingPage = () => {
       }
       setLoading(true);
       setError(false);
-      const response = await fetch("api/listing/create", {
+      const response = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, userRef: currentUser._id }),
@@ -157,7 +174,7 @@ const UpdateListingPage = () => {
   return (
     <main className="p-3 max-w-5xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
-        Create Listing Page
+        Update Listing Page
       </h1>
 
       <form
@@ -371,7 +388,7 @@ const UpdateListingPage = () => {
             className="p-3 mt-3 bg-green-500 text-white rounded-lg hover:opacity-95 disabled:opacity-80"
             disabled={loading || uploading}
           >
-            {loading ? "Creating..." : "CREATE LISTING"}
+            {loading ? "Creating..." : "UPDATE LISTING"}
           </button>
         </div>
       </form>
@@ -379,4 +396,4 @@ const UpdateListingPage = () => {
   );
 };
 
-export default UpdateListingPage;
+export default CreateListingPage;
