@@ -11,6 +11,7 @@ import PrivateRoute from "./components/routes/PrivateRoute";
 import ProfilePage from "./pages/ProfilePage";
 import CreateListingPage from "./pages/CreateListingPage";
 import UpdateListingPage from "./pages/UpdateListingPage";
+import ListingPage from "./pages/ListingPage";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/listing/:listingId" element={<ListingPage />} />
 
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<ProfilePage />} />
